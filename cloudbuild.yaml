@@ -15,7 +15,11 @@ steps:
 
 # Deploy to Cloud Run
 - name: google/cloud-sdk
-  args: [ 'gcloud', 'run', 'deploy', '${SHORT_SHA}',
-          '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image',
+  args: [ 'gcloud', 'run', 'deploy', 'mycl-${SHORT_SHA}',
+          '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image:${SHORT_SHA}',
           '--region', 'us-central1', '--platform', 'managed',
           '--allow-unauthenticated' ]
+
+# Store images in Google Artifact Registry
+images:
+  - us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image:${SHORT_SHA}
