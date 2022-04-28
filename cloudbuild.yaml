@@ -9,10 +9,10 @@ steps:
   args: ['build', '-t',
          'us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image:${SHORT_SHA}', '.']
 
-## Docker push to Google Artifact Registry
-#- name: 'gcr.io/cloud-builders/docker'
-#  args: ['push',  'us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image']
-##
+# Docker push to Google Artifact Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push',  'us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image']
+
 ### Deploy to Cloud Run
 ##- name: google/cloud-sdk
 ##  args: [ 'gcloud', 'run', 'deploy', '${SHORT_SHA}',
