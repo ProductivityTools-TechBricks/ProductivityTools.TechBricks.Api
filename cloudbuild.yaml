@@ -16,6 +16,6 @@ steps:
 # Deploy to Cloud Run
 - name: google/cloud-sdk
   args: [ 'gcloud', 'run', 'deploy', '${SHORT_SHA}',
-          '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/myimage',
+          '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image',
           '--region', 'us-central1', '--platform', 'managed',
           '--allow-unauthenticated' ]
