@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Api
+import os
 
 from Resources.CardResource import CardResource
 
@@ -20,4 +21,4 @@ def register_resources(app):
 
 if __name__=="__main__":
     app=create_app()
-    app.run(port=5000,host='0.0.0.0',debug=True)
+    app.run(port=int(os.environ.get("PORT", 8080)),host='0.0.0.0',debug=True)
