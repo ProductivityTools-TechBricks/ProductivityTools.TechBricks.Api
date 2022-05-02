@@ -4,4 +4,4 @@ from http import HTTPStatus
 
 class CardResource(Resource):
     def get(self):
-        return {'data':'pawel'}, HTTPStatus.OK
+        return {'data':'pawel1'}, HTTPStatus.OK

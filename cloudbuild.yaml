@@ -19,7 +19,3 @@ steps:
           '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image:${SHORT_SHA}',
           '--region', 'us-central1', '--platform', 'managed',
           '--allow-unauthenticated' ]
-
-## Store images in Google Artifact Registry
-#images:
-#  - us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image:${SHORT_SHA}
