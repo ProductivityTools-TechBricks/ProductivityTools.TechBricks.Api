@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api
 import os
 
-from Resources.CardResource import CardResource
+from Resources.Shortcut import ShortcutResource
 
 def create_app():
     app=Flask(__name__)
@@ -17,7 +17,7 @@ def register_extensions(app):
 
 def register_resources(app):
     api=Api(app)
-    api.add_resource(CardResource, '/Card')
+    api.add_resource(ShortcutResource, '/Card')
 
 if __name__=="__main__":
     app=create_app()
