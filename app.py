@@ -1,11 +1,15 @@
 from flask import Flask
 from flask_restful import Api
+from flask_migrate import Migrate
+from extensions import db
 import os
+from config import Config
 
 from Resources.Shortcut import ShortcutResource
 
 def create_app():
     app=Flask(__name__)
+    app.config.from_object(Config)
 
     register_extensions(app)
     register_resources(app)
@@ -13,7 +17,8 @@ def create_app():
     return app
 
 def register_extensions(app):
-    x=1
+    db.init_app(app)
+    migrate=Migrate(app,db)
 
 def register_resources(app):
     api=Api(app)
