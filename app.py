@@ -1,24 +1,24 @@
 from flask import Flask
 from flask_restful import Api
 from flask_migrate import Migrate
-from extensions import db
 import os
-from config import Config
+#from config import Config
+#from Models.shortuct import Shortcut
 
 from Resources.Shortcut import ShortcutResource
 
 def create_app():
     app=Flask(__name__)
-    app.config.from_object(Config)
+#    app.config.from_object(Config)
 
-    register_extensions(app)
+    # register_extensions(app)
     register_resources(app)
 
     return app
 
-def register_extensions(app):
-    db.init_app(app)
-    migrate=Migrate(app,db)
+# def register_extensions(app):
+#     db.init_app(app)
+#     migrate=Migrate(app,db)
 
 def register_resources(app):
     api=Api(app)
