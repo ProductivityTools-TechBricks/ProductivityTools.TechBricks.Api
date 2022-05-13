@@ -10,7 +10,9 @@ class ShortcutResource(Resource):
         result=[]
         shortucts2=firestoredb.collection('shortcuts').stream()
         for doc in shortucts2:
-            result.append(doc.to_dict())
+            partResult=doc.to_dict()
+            partResult["document_id"]=doc.id
+            result.append(partResult)
         return result, HTTPStatus.OK
 
     def post(self):
