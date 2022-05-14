@@ -1,5 +1,4 @@
-# class Config:
-#     DEBUG=True
-#
-#     SQLALCHEMY_DATABASE_URI='postgresql+psycopg2://pawel:pawel@localhost/PTTechBricks'
-#     SQLALCHEMY_TRACK_MODIFICATIONS = False
+class Config:
+    DEBUG=True
+    SECRET_KEY = 'super-secret-key'
+    JWT_ERROR_MESSAGE_KEY = 'message'
