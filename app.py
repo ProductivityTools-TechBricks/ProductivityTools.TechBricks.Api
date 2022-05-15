@@ -3,7 +3,6 @@ from flask_restful import Api
 from flask_migrate import Migrate
 from flask_cors  import CORS
 import os
-from extensions import jwt
 from config import Config
 #from Models.shortuct import Shortcut
 
@@ -14,13 +13,12 @@ def create_app():
     CORS(app)
     app.config.from_object(Config)
 
-    register_extensions(app)
+    #register_extensions(app)
     register_resources(app)
 
     return app
 
-def register_extensions(app):
-      jwt.init_app(app)
+#def register_extensions(app):
 #     db.init_app(app)
 #     migrate=Migrate(app,db)
 
