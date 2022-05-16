@@ -10,7 +10,7 @@ from Resources.Shortcut import ShortcutResource
 
 def create_app():
     app=Flask(__name__)
-    CORS(app)
+    #CORS(app)
     app.config.from_object(Config)
 
     #register_extensions(app)
