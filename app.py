@@ -13,14 +13,14 @@ def create_app():
     #CORS(app)
     app.config.from_object(Config)
 
-    #register_extensions(app)
+    register_extensions(app)
     register_resources(app)
 
     return app
 
-#def register_extensions(app):
-#    db.init_app(app)
-#    migrate=Migrate(app,db)
+def register_extensions(app):
+    db.init_app(app)
+    migrate=Migrate(app,db)
 
 def register_resources(app):
     api=Api(app)
