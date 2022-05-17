@@ -1,5 +1,4 @@
 from flask import request,jsonify
-from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from http import HTTPStatus
 from extensions import firestoredb
