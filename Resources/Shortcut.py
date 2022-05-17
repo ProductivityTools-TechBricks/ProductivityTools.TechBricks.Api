@@ -6,10 +6,10 @@ from firebase_admin import auth
 
 class ShortcutResource(Resource):
     def get(self):
-        # id_token=request.headers.environ['HTTP_AUTHORIZATION']
-        # id_token = id_token.replace("Bearer", "")
-        # id_token = id_token.replace(" ", "")
-        # decoded_token = auth.verify_id_token(id_token)
+        id_token=request.headers.environ['HTTP_AUTHORIZATION']
+        id_token = id_token.replace("Bearer", "")
+        id_token = id_token.replace(" ", "")
+        decoded_token = auth.verify_id_token(id_token)
 
         shortucts=firestoredb.collection('shortcuts').stream()
         my_dict = {el.id: el.to_dict() for el in shortucts}
