@@ -5,5 +5,5 @@ from firebase_admin import credentials, firestore, initialize_app
 # db=SQLAlchemy()
 
 #cred=credentials.Certificate("D:\\Bitbucket\\all.configuration\\pttechbricksapi-adminsdk.json")
-#default_app=initialize_app()
+default_app=initialize_app()
 firestoredb=firestore.client()

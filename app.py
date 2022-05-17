@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_restful import Api
 from flask_migrate import Migrate
-from extensions import db
 from flask_cors  import CORS
 import os
 from config import Config
