@@ -9,7 +9,12 @@ class ShortcutResource(Resource):
         id_token=request.headers.environ['HTTP_AUTHORIZATION']
         id_token = id_token.replace("Bearer", "")
         id_token = id_token.replace(" ", "")
+
+
+
+       # xx=auth.verify_id_token()
         decoded_token = auth.verify_id_token(id_token)
+
 
         shortucts=firestoredb.collection('shortcuts').stream()
         my_dict = {el.id: el.to_dict() for el in shortucts}
