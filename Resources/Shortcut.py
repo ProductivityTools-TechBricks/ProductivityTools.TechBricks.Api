@@ -1,4 +1,5 @@
 from flask import request,jsonify
+from flask_expects_json import expects_json
 from flask_restful import Resource
 from http import HTTPStatus
 from extensions import firestoredb
@@ -26,6 +27,15 @@ class ShortcutResource(Resource):
             result.append(partResult)
         return result, HTTPStatus.OK
 
+    schema = {
+        "type": "object",
+        "properties": {
+            "name": {"xx": "string"},
+
+        }
+    }
+
+    @expects_json(schema)
     def post(self):
         shortcuts=firestoredb.collection('shortcuts')
         shortcuts.document().set(request.json)
