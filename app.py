@@ -7,6 +7,7 @@ from config import Config
 
 from Resources.Shortcut import ShortcutResource
 from Resources.Token import TokenResource
+from Resources.Brick import BrickResource
 
 def create_app():
     app=Flask(__name__)
@@ -26,6 +27,7 @@ def register_resources(app):
     api=Api(app)
     api.add_resource(ShortcutResource, '/Card')
     api.add_resource(TokenResource, '/Token')
+    api.add_resource(BrickResource,'/Brick')
 
 if __name__=="__main__":
     app=create_app()
