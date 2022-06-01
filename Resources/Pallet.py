@@ -11,6 +11,12 @@ class PalletResource(Resource):
         "properties":{
             "name":{
                 "type":"string"
+            },
+            "owners":{
+                "type":"array",
+                "items":{
+                    "type":"string"
+                }
             }
         }
     }
