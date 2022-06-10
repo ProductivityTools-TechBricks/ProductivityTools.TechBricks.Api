@@ -22,3 +22,7 @@ Invoke-WebRequest -Uri http://127.0.0.1:8080/Card -Method Post -Body (@{name='VS
 ```
 
 in requrements maybe firestore shuld be added
+
+API which needs to be enabled
+- Cloud Run API
+- Artifact Repository API
