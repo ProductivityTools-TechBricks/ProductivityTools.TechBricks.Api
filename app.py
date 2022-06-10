@@ -5,6 +5,7 @@ from flask_cors  import CORS
 import os
 from config import Config
 
+from Resources.Date import DateResource
 from Resources.Pallet import PalletResource
 from Resources.Shortcut import ShortcutResource
 from Resources.Token import TokenResource
@@ -30,6 +31,7 @@ def register_resources(app):
     api.add_resource(TokenResource, '/Token')
     api.add_resource(BrickResource,'/Brick')
     api.add_resource(PalletResource,'/pallet')
+    api.add_resource(DateResource,'/Date')
 
 if __name__=="__main__":
     app=create_app()
