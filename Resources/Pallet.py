@@ -3,6 +3,7 @@ from flask_restful import Resource
 from flask_expects_json import expects_json
 from http import HTTPStatus
 from extensions import firestoredb
+from firebase_admin import auth
 
 class PalletResource(Resource):
 
@@ -58,12 +59,19 @@ class PalletResource(Resource):
         palette.document().set(request.json)
 
     def post(self):
+        id_token = request.headers.environ['HTTP_AUTHORIZATION']
+        id_token = id_token.replace("Bearer", "")
+        id_token = id_token.replace(" ", "")
+        decoded_token = auth.verify_id_token(id_token)
+
         document_id=request.json["document_id"]
         firestoredb.collection('pallet').document(document_id).set(request.json)
 
     def get(self):
+        owner=request.args['owner']
+        #owner = "pwujczyk@gmail.com"
         result=[]
-        pallets=firestoredb.collection('pallet').stream();
+        pallets=firestoredb.collection('pallet').where("owners",u'array_contains',owner).stream();
         for doc in pallets:
             partResult=doc.to_dict();
             partResult["document_id"]=doc.id
