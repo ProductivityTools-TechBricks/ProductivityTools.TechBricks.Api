@@ -62,7 +62,10 @@ class PalletResource(Resource):
         id_token = request.headers.environ['HTTP_AUTHORIZATION']
         id_token = id_token.replace("Bearer", "")
         id_token = id_token.replace(" ", "")
+        if id_token == 'null':
+            return {'message':'access token is incorrect'},HTTPStatus.UNAUTHORIZED
         decoded_token = auth.verify_id_token(id_token)
+
 
         document_id=request.json["document_id"]
         firestoredb.collection('pallet').document(document_id).set(request.json)
