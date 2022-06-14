@@ -53,19 +53,24 @@ class PalletResource(Resource):
         }
     }
 
-    @expects_json(addSchema)
-    def put(self):
-        palette = firestoredb.collection('pallet')
-        palette.document().set(request.json)
-
-    def post(self):
+    def validate_token(self):
         id_token = request.headers.environ['HTTP_AUTHORIZATION']
         id_token = id_token.replace("Bearer", "")
         id_token = id_token.replace(" ", "")
         if id_token == 'null':
-            return {'message':'access token is incorrect'},HTTPStatus.UNAUTHORIZED
+            return False
         decoded_token = auth.verify_id_token(id_token)
 
+    @expects_json(addSchema)
+    def put(self):
+        if self.validate_token() == False:
+            return {'message': 'access token is incorrect'}, HTTPStatus.UNAUTHORIZED
+        palette = firestoredb.collection('pallet')
+        palette.document().set(request.json)
+
+    def post(self):
+        if self.validate_token()==False:
+            return {'message': 'access token is incorrect'}, HTTPStatus.UNAUTHORIZED
 
         document_id=request.json["document_id"]
         firestoredb.collection('pallet').document(document_id).set(request.json)
