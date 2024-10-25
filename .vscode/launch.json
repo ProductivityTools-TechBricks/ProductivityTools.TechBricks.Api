@@ -19,7 +19,7 @@
                // "--no-debugger", Comment out this line
                // "--no-reload"  Comment out this line
             ],
-            "envFile": "d:/GitHub/Home.Configuration/Neo4j.env",
+            "envFile": "d:/GitHub/Home.Configuration/ProductivityTools.TechBricks.Prod.env",
             "jinja": true
         }
     ]

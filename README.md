@@ -26,3 +26,16 @@ in requrements maybe firestore shuld be added
 API which needs to be enabled
 - Cloud Run API
 - Artifact Repository API
+
+## Debugger
+
+In .vscode directory launch.json file exists. In this file the reference to the .env file is defined
+
+```
+"envFile": "d:/GitHub/Home.Configuration/ProductivityTools.TechBricks.Prod.env",
+```
+In this file the environment variable that points to the an admin-sdk is defined
+```
+GOOGLE_APPLICATION_CREDENTIALS="d:\GitHub\Home.Configuration\pttechbricksprod-firebase-adminsdk-l92xc-b75638fd8f.json"
+GOOGLE_CLOUD_PROJECT="pttechbricksprod"
+```
