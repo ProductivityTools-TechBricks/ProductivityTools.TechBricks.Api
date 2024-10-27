@@ -85,3 +85,8 @@ class PalletResource(Resource):
             partResult["document_id"]=doc.id
             result.append(partResult)
         return result,HTTPStatus.OK
+    
+    def delete(self):
+        self.validate_token()
+        palletId=request.json['document_id'];
+        return HTTPStatus.OK
