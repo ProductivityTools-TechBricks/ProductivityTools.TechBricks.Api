@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Flask",
+            "name": "Prod",
             "type": "python",
             "request": "launch",
             "module": "flask",
@@ -20,6 +20,24 @@
                // "--no-reload"  Comment out this line
             ],
             "envFile": "d:/GitHub/Home.Configuration/ProductivityTools.TechBricks.Prod.env",
+            "jinja": true
+        },
+        {
+            "name": "Dev",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "app.py",
+                "FLASK_ENV": "development",
+                "FLASK_DEBUG": "1"  // make sure it is not "0"
+            },
+            "args": [
+                "run",
+               // "--no-debugger", Comment out this line
+               // "--no-reload"  Comment out this line
+            ],
+            "envFile": "d:/GitHub/Home.Configuration/ProductivityTools.TechBricks.Dev.env",
             "jinja": true
         }
     ]

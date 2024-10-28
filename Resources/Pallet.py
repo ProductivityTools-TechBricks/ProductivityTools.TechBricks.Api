@@ -87,6 +87,7 @@ class PalletResource(Resource):
         return result,HTTPStatus.OK
     
     def delete(self):
-        self.validate_token()
+        
+        x= self.validate_token()
         palletId=request.json['document_id'];
         return HTTPStatus.OK
