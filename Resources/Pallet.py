@@ -4,6 +4,8 @@ from flask_expects_json import expects_json
 from http import HTTPStatus
 from extensions import firestoredb
 from firebase_admin import auth
+from google.cloud.firestore_v1.base_query import FieldFilter
+
 
 class PalletResource(Resource):
 
@@ -60,6 +62,21 @@ class PalletResource(Resource):
         if id_token == 'null':
             return False
         decoded_token = auth.verify_id_token(id_token)
+        print(decoded_token)
+        
+    def validate_user_with_token(self,user_names):
+        id_token = request.headers.environ['HTTP_AUTHORIZATION']
+        id_token = id_token.replace("Bearer", "")
+        id_token = id_token.replace(" ", "")
+        if id_token == 'null':
+            return False
+        decoded_token = auth.verify_id_token(id_token)
+        token_email=decoded_token["email"]
+        tokan_name=token_email.replace("@gmail.com","")
+        if tokan_name in user_names:
+            return True
+        return False
+        print(decoded_token)
 
     @expects_json(addSchema)
     def put(self):
@@ -79,15 +96,28 @@ class PalletResource(Resource):
         owner=request.args['owner']
         #owner = "pwujczyk@gmail.com"
         result=[]
-        pallets=firestoredb.collection('pallet').where("owners",u'array_contains',owner).stream();
+
+
+        pallets=firestoredb.collection('pallet').where(filter=FieldFilter("owners",'array_contains',owner)).stream()
         for doc in pallets:
             partResult=doc.to_dict();
             partResult["document_id"]=doc.id
             result.append(partResult)
+
         return result,HTTPStatus.OK
     
     def delete(self):
         
         x= self.validate_token()
         palletId=request.json['document_id'];
-        return HTTPStatus.OK
+        pellet=firestoredb.collection('pallet').document(palletId)
+        doc=pellet.get();
+        pellet_dict=doc.to_dict();
+        user_names=pellet_dict["owners"]
+        if self.validate_user_with_token(user_names):
+            print("remove")
+            return HTTPStatus.OK
+        else:
+            return HTTPStatus.UNAUTHORIZED
+        
+        
