@@ -116,6 +116,7 @@ class PalletResource(Resource):
         user_names=pellet_dict["owners"]
         if self.validate_user_with_token(user_names):
             print("remove")
+            pellet.delete()
             return HTTPStatus.OK
         else:
             return HTTPStatus.UNAUTHORIZED
