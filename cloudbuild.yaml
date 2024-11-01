@@ -5,16 +5,16 @@ steps:
   args: ["install", "-r", "requirements.txt", "--user"]
 
 # Docker Build
-- name: 'Bild'
+- name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t',
          'us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image:${SHORT_SHA}', '.']
 
 # Docker push to Google Artifact Registry
-- name: 'Push to artifact'
+- name: 'gcr.io/cloud-builders/docker'
   args: ['push',  'us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image']
 
 # Deploy to Cloud Run
-- name: Deploy to cloud run
+- name: google/cloud-sdk
   args: [ 'gcloud', 'run', 'deploy', 'techbricksapi',
           '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image:${SHORT_SHA}',
           '--region', 'us-central1', '--platform', 'managed',
