@@ -11,7 +11,7 @@ steps:
 
 # Docker push to Google Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push',  'us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image']
+  args: ['push',  'us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image:${SHORT_SHA}']
 
 # Deploy to Cloud Run
 - name: google/cloud-sdk
