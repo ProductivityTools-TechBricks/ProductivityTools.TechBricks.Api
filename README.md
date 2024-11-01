@@ -4,10 +4,18 @@
 
 
 ## Configuration
-For local run I have Environment Variable set which points out to the ServiceAccont json file
+- I code it in the vscode. 
+- In the ```.vscode``` directory I have a lanuch.json file.
+- In that file two two configurations are dfined for prod and dev environment
+- Configuration has envFile variable that points to the file with the variables that should be set for the environment.
+- in the .env file I have project and path to the serviceaccount.json file
+
+
+
 ![PycharmEnvVariable](Images/PycharmEnvVariable.png)
 
-For GCP I setup the ``GOOGLE_CLOUD_PROJECT`` environment variable in the ``cloudbuild.yaml`` file
+For GCP I setup the ``GOOGLE_CLOUD_PROJECT`` environment variable in the ``cloudbuild.yaml`` 
+
 GCP is on it is own make an validation with this setup
 ```
 - name: google/cloud-sdk
