@@ -106,6 +106,7 @@ class PalletResource(Resource):
 
         return result,HTTPStatus.OK
     
+        
     def delete(self):
         
         x= self.validate_token()
@@ -120,5 +121,20 @@ class PalletResource(Resource):
             return HTTPStatus.OK
         else:
             return HTTPStatus.UNAUTHORIZED
-        
-        
+            
+    def patch(self):
+        if self.validate_token() == False:
+            return {'message': 'access token is incorrect'}, HTTPStatus.UNAUTHORIZED
+
+        palletId = request.json['document_id']
+        name = request.json['name']
+        pellet = firestoredb.collection('pallet').document(palletId)
+        doc = pellet.get()
+        pellet_dict = doc.to_dict()
+        user_names = pellet_dict.get("owners", [])
+        if self.validate_user_with_token(user_names):
+            print("rename")
+            pellet.update({"name": name})
+            return HTTPStatus.OK
+        else:
+            return HTTPStatus.UNAUTHORIZED

@@ -3,6 +3,7 @@
 ![Class](./Images/ClassCategory.png)
 
 
+
 ## Configuration
 
 ### Local
@@ -47,4 +48,14 @@ In this file the environment variable that points to the an admin-sdk is defined
 ```
 GOOGLE_APPLICATION_CREDENTIALS="d:\GitHub\Home.Configuration\pttechbricksprod-firebase-adminsdk-l92xc-b75638fd8f.json"
 GOOGLE_CLOUD_PROJECT="pttechbricksprod"
+```
+
+## Run
+
+```
+sudo apt update && sudo apt install -y python3-pip python3.13-venv
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python3 app.py
 ```

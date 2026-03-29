@@ -19,7 +19,8 @@
                // "--no-debugger", Comment out this line
                // "--no-reload"  Comment out this line
             ],
-            "envFile": "d:/GitHub/Home.Configuration/ProductivityTools.TechBricks.Prod.env",
+            //"envFile": "d:/GitHub/Home.Configuration/ProductivityTools.TechBricks.Prod.env",
+            "envFile": "/usr/local/google/home/pwujczyk/github/Home.Configuration/ProductivityTools.TechBricks.Prod.env",
             "jinja": true
         },
         {
@@ -37,7 +38,8 @@
                // "--no-debugger", Comment out this line
                // "--no-reload"  Comment out this line
             ],
-            "envFile": "d:/GitHub/Home.Configuration/ProductivityTools.TechBricks.Dev.env",
+            "envFile": "/usr/local/google/home/pwujczyk/github/Home.Configuration/ProductivityTools.TechBricks.Dev.env",
+            //"envFile": "d:/GitHub/Home.Configuration/ProductivityTools.TechBricks.Dev.env",
             "jinja": true
         }
     ]
