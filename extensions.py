@@ -6,4 +6,4 @@ from firebase_admin import credentials, firestore, initialize_app
 
 #cred=credentials.Certificate("pttechbricksapi-adminsdk.json")
 default_app=initialize_app()
-firestoredb=firestore.client()
+firestoredb=firestore.client(database_id='techbricks')
