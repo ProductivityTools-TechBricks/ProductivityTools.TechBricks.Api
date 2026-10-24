@@ -19,3 +19,6 @@ steps:
           '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/pttechbricks-cloudbuild/image:${SHORT_SHA}',
           '--region', 'us-central1', '--platform', 'managed',
           '--allow-unauthenticated' ,'--update-env-vars', 'GOOGLE_CLOUD_PROJECT=${PROJECT_ID}']
+
+options:
+  logging: CLOUD_LOGGING_ONLY
