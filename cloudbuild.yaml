@@ -7,16 +7,16 @@ steps:
 # Docker Build
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t',
-         'us-central1-docker.pkg.dev/${PROJECT_ID}/pttechbricks-cloudbuild/image:${SHORT_SHA}', '.']
+         'europe-west1-docker.pkg.dev/${PROJECT_ID}/pttechbricks-cloudbuild/image:${SHORT_SHA}', '.']
 
 # Docker push to Google Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push',  'us-central1-docker.pkg.dev/${PROJECT_ID}/pttechbricks-cloudbuild/image:${SHORT_SHA}']
+  args: ['push',  'europe-west1-docker.pkg.dev/${PROJECT_ID}/pttechbricks-cloudbuild/image:${SHORT_SHA}']
 
 # Deploy to Cloud Run
 - name: google/cloud-sdk
   args: [ 'gcloud', 'run', 'deploy', 'pt-techbricks-api',
-          '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/pttechbricks-cloudbuild/image:${SHORT_SHA}',
+          '--image=europe-west1-docker.pkg.dev/${PROJECT_ID}/pttechbricks-cloudbuild/image:${SHORT_SHA}',
           '--region', 'europe-west1', '--platform', 'managed',
           '--allow-unauthenticated' ,'--update-env-vars', 'GOOGLE_CLOUD_PROJECT=${PROJECT_ID}']
 
