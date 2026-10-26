@@ -13,7 +13,7 @@ from Resources.Brick import BrickResource
 
 def create_app():
     app=Flask(__name__)
-    CORS(app)
+    CORS(app, origins=["https://pt-techbricks.web.app", "https://pt-techbricks.firebaseapp.com", "http://localhost:3000"])
     app.config.from_object(Config)
 
     #register_extensions(app)
