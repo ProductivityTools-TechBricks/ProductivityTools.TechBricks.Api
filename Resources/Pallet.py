@@ -55,28 +55,42 @@ class PalletResource(Resource):
         }
     }
 
+    def decode_token(self):
+        """Returns the decoded Firebase ID token or None if missing/invalid/expired.
+
+        ID tokens live for 1 hour; the web client refreshes them from the
+        long-lived Firebase session and retries once on 401, so invalid tokens
+        must result in 401 (not 500).
+        """
+        id_token = request.headers.get('Authorization', '')
+        id_token = id_token.replace("Bearer", "")
+        id_token = id_token.replace(" ", "")
+        if id_token in ('', 'null', 'undefined'):
+            return None
+        try:
+            return auth.verify_id_token(id_token)
+        except (auth.ExpiredIdTokenError, auth.RevokedIdTokenError, auth.InvalidIdTokenError) as e:
+            print("Token validation failed:", e)
+            return None
+        except ValueError as e:
+            print("Token validation failed:", e)
+            return None
+
     def validate_token(self):
-        id_token = request.headers.environ['HTTP_AUTHORIZATION']
-        id_token = id_token.replace("Bearer", "")
-        id_token = id_token.replace(" ", "")
-        if id_token == 'null':
+        decoded_token = self.decode_token()
+        if decoded_token is None:
             return False
-        decoded_token = auth.verify_id_token(id_token)
-        print(decoded_token)
-        
+        return True
+
     def validate_user_with_token(self,user_names):
-        id_token = request.headers.environ['HTTP_AUTHORIZATION']
-        id_token = id_token.replace("Bearer", "")
-        id_token = id_token.replace(" ", "")
-        if id_token == 'null':
+        decoded_token = self.decode_token()
+        if decoded_token is None:
             return False
-        decoded_token = auth.verify_id_token(id_token)
         token_email=decoded_token["email"]
         tokan_name=token_email.replace("@gmail.com","")
         if tokan_name in user_names:
             return True
         return False
-        print(decoded_token)
 
     @expects_json(addSchema)
     def put(self):
@@ -109,7 +123,8 @@ class PalletResource(Resource):
         
     def delete(self):
         
-        x= self.validate_token()
+        if self.validate_token() == False:
+            return {'message': 'access token is incorrect'}, HTTPStatus.UNAUTHORIZED
         palletId=request.json['document_id'];
         pellet=firestoredb.collection('pallet').document(palletId)
         doc=pellet.get();
