@@ -22,25 +22,6 @@
             //"envFile": "d:/GitHub/Home.Configuration/ProductivityTools.TechBricks.Prod.env",
             "envFile": "/usr/local/google/home/pwujczyk/github/Home.Configuration/ProductivityTools.TechBricks.Prod.env",
             "jinja": true
-        },
-        {
-            "name": "Dev",
-            "type": "python",
-            "request": "launch",
-            "module": "flask",
-            "env": {
-                "FLASK_APP": "app.py",
-                "FLASK_ENV": "development",
-                "FLASK_DEBUG": "1"  // make sure it is not "0"
-            },
-            "args": [
-                "run",
-               // "--no-debugger", Comment out this line
-               // "--no-reload"  Comment out this line
-            ],
-            "envFile": "/usr/local/google/home/pwujczyk/github/Home.Configuration/ProductivityTools.TechBricks.Dev.env",
-            //"envFile": "d:/GitHub/Home.Configuration/ProductivityTools.TechBricks.Dev.env",
-            "jinja": true
         }
     ]
 }

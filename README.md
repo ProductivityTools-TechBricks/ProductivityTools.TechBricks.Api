@@ -9,7 +9,7 @@
 ### Local
 - I code it in the vscode. 
 - In the ```.vscode``` directory I have a lanuch.json file.
-- In that file two two configurations are dfined for prod and dev environment
+- In that file the Prod configuration is defined (there is no dev environment anymore)
 - Configuration has envFile variable that points to the file with the variables that should be set for the environment.
 - in the .env file I have project and path to the serviceaccount.json file
 
@@ -21,9 +21,9 @@ For GCP I setup the ``GOOGLE_CLOUD_PROJECT`` environment variable in the ``cloud
 GCP is on it is own make an validation with this setup
 ```
 - name: google/cloud-sdk
-  args: [ 'gcloud', 'run', 'deploy', 'techbricksapi',
-          '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/apiimage/image:${SHORT_SHA}',
-          '--region', 'us-central1', '--platform', 'managed',
+  args: [ 'gcloud', 'run', 'deploy', 'pt-techbricks-api',
+          '--image=europe-west1-docker.pkg.dev/${PROJECT_ID}/pttechbricks-cloudbuild/image:${SHORT_SHA}',
+          '--region', 'europe-west1', '--platform', 'managed',
           '--allow-unauthenticated' ,'--update-env-vars', 'GOOGLE_CLOUD_PROJECT=${PROJECT_ID}']
 ```
 
@@ -46,8 +46,8 @@ In .vscode directory launch.json file exists. In this file the reference to the 
 ```
 In this file the environment variable that points to the an admin-sdk is defined
 ```
-GOOGLE_APPLICATION_CREDENTIALS="d:\GitHub\Home.Configuration\pttechbricksprod-firebase-adminsdk-l92xc-b75638fd8f.json"
-GOOGLE_CLOUD_PROJECT="pttechbricksprod"
+GOOGLE_APPLICATION_CREDENTIALS="<path to the ptprojectsweb admin sdk json>"
+GOOGLE_CLOUD_PROJECT="ptprojectsweb"
 ```
 
 ## Run
