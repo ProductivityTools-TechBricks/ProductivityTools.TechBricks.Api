@@ -7,9 +7,9 @@ from config import Config
 
 from Resources.Date import DateResource
 from Resources.Pallet import PalletResource
-from Resources.Shortcut import ShortcutResource
-from Resources.Token import TokenResource
-from Resources.Brick import BrickResource
+#from Resources.Shortcut import ShortcutResource
+#from Resources.Token import TokenResource
+#from Resources.Brick import BrickResource
 
 def create_app():
     app=Flask(__name__)
@@ -27,9 +27,12 @@ def create_app():
 
 def register_resources(app):
     api=Api(app)
-    api.add_resource(ShortcutResource, '/Card')
-    api.add_resource(TokenResource, '/Token')
-    api.add_resource(BrickResource,'/Brick')
+    # Disabled: unauthenticated legacy endpoint (security).
+    #api.add_resource(ShortcutResource, '/Card')
+    # Disabled: unauthenticated legacy endpoint (security).
+    #api.add_resource(TokenResource, '/Token')
+    # Disabled: unauthenticated legacy endpoint (security).
+    #api.add_resource(BrickResource,'/Brick')
     api.add_resource(PalletResource,'/pallet')
     api.add_resource(DateResource,'/Date')
 

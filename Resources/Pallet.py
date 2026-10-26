@@ -76,80 +76,117 @@ class PalletResource(Resource):
             print("Token validation failed:", e)
             return None
 
-    def validate_token(self):
-        decoded_token = self.decode_token()
-        if decoded_token is None:
-            return False
-        return True
+    def get_user_name(self):
+        """Returns the caller's user name (gmail login) or None if not authenticated.
 
-    def validate_user_with_token(self,user_names):
+        Owners of a pallet are stored as gmail logins (email without
+        '@gmail.com'), so the caller is identified the same way. Only verified
+        emails are accepted, otherwise anybody could register an account with
+        somebody else's address.
+        """
         decoded_token = self.decode_token()
         if decoded_token is None:
-            return False
-        token_email=decoded_token["email"]
-        tokan_name=token_email.replace("@gmail.com","")
-        if tokan_name in user_names:
-            return True
-        return False
+            return None
+        token_email = decoded_token.get("email")
+        if not token_email or not decoded_token.get("email_verified", False):
+            return None
+        return token_email.replace("@gmail.com", "")
+
+    def get_owned_pallet(self, pallet_id, user_name):
+        """Loads a pallet and checks that user_name is one of its owners.
+
+        Returns (document_reference, pallet_dict, None) on success or
+        (None, None, error_response) when the pallet is missing or not owned.
+        """
+        if not pallet_id:
+            return None, None, ({'message': 'document_id is required'}, HTTPStatus.BAD_REQUEST)
+        pallet = firestoredb.collection('pallet').document(pallet_id)
+        doc = pallet.get()
+        if not doc.exists:
+            return None, None, ({'message': 'pallet not found'}, HTTPStatus.NOT_FOUND)
+        pallet_dict = doc.to_dict()
+        if user_name not in pallet_dict.get("owners", []):
+            return None, None, ({'message': 'you are not an owner of this pallet'}, HTTPStatus.FORBIDDEN)
+        return pallet, pallet_dict, None
+
+    UNAUTHORIZED_RESPONSE = ({'message': 'access token is incorrect'}, HTTPStatus.UNAUTHORIZED)
 
     @expects_json(addSchema)
     def put(self):
-        if self.validate_token() == False:
-            return {'message': 'access token is incorrect'}, HTTPStatus.UNAUTHORIZED
+        user_name = self.get_user_name()
+        if user_name is None:
+            return self.UNAUTHORIZED_RESPONSE
+        pallet = dict(request.json)
+        owners = list(pallet.get("owners") or [])
+        # The creator always owns the pallet they create.
+        if user_name not in owners:
+            owners.append(user_name)
+        pallet["owners"] = owners
+        pallet.setdefault("bricks", [])
         palette = firestoredb.collection('pallet')
-        palette.document().set(request.json)
+        palette.document().set(pallet)
+        return {'message': 'created'}, HTTPStatus.OK
 
     def post(self):
-        if self.validate_token()==False:
-            return {'message': 'access token is incorrect'}, HTTPStatus.UNAUTHORIZED
+        user_name = self.get_user_name()
+        if user_name is None:
+            return self.UNAUTHORIZED_RESPONSE
 
-        document_id=request.json["document_id"]
-        firestoredb.collection('pallet').document(document_id).set(request.json)
+        document_id = request.json.get("document_id")
+        pallet, _, error = self.get_owned_pallet(document_id, user_name)
+        if error:
+            return error
+        updated = dict(request.json)
+        owners = updated.get("owners")
+        # An owner must not be able to accidentally remove themselves
+        # (or everybody) and lose access to the pallet.
+        if not isinstance(owners, list) or user_name not in owners:
+            return {'message': 'owners must be a list containing the current user'}, HTTPStatus.BAD_REQUEST
+        pallet.set(updated)
+        return {'message': 'updated'}, HTTPStatus.OK
 
     def get(self):
-        owner=request.args['owner']
-        #owner = "pwujczyk@gmail.com"
-        result=[]
+        user_name = self.get_user_name()
+        if user_name is None:
+            return self.UNAUTHORIZED_RESPONSE
 
+        owner = request.args.get('owner') or user_name
+        result = []
 
-        pallets=firestoredb.collection('pallet').where(filter=FieldFilter("owners",'array_contains',owner)).stream()
+        pallets = firestoredb.collection('pallet').where(filter=FieldFilter("owners", 'array_contains', owner)).stream()
         for doc in pallets:
-            partResult=doc.to_dict();
-            partResult["document_id"]=doc.id
+            partResult = doc.to_dict()
+            # Only pallets the caller co-owns are visible. Looking at another
+            # user's page shows just the pallets shared with the caller.
+            if user_name not in partResult.get("owners", []):
+                continue
+            partResult["document_id"] = doc.id
             result.append(partResult)
 
-        return result,HTTPStatus.OK
-    
-        
-    def delete(self):
-        
-        if self.validate_token() == False:
-            return {'message': 'access token is incorrect'}, HTTPStatus.UNAUTHORIZED
-        palletId=request.json['document_id'];
-        pellet=firestoredb.collection('pallet').document(palletId)
-        doc=pellet.get();
-        pellet_dict=doc.to_dict();
-        user_names=pellet_dict["owners"]
-        if self.validate_user_with_token(user_names):
-            print("remove")
-            pellet.delete()
-            return HTTPStatus.OK
-        else:
-            return HTTPStatus.UNAUTHORIZED
-            
-    def patch(self):
-        if self.validate_token() == False:
-            return {'message': 'access token is incorrect'}, HTTPStatus.UNAUTHORIZED
+        return result, HTTPStatus.OK
 
-        palletId = request.json['document_id']
-        name = request.json['name']
-        pellet = firestoredb.collection('pallet').document(palletId)
-        doc = pellet.get()
-        pellet_dict = doc.to_dict()
-        user_names = pellet_dict.get("owners", [])
-        if self.validate_user_with_token(user_names):
-            print("rename")
-            pellet.update({"name": name})
-            return HTTPStatus.OK
-        else:
-            return HTTPStatus.UNAUTHORIZED
+    def delete(self):
+        user_name = self.get_user_name()
+        if user_name is None:
+            return self.UNAUTHORIZED_RESPONSE
+        pallet, _, error = self.get_owned_pallet(request.json.get('document_id'), user_name)
+        if error:
+            return error
+        print("remove")
+        pallet.delete()
+        return {'message': 'deleted'}, HTTPStatus.OK
+
+    def patch(self):
+        user_name = self.get_user_name()
+        if user_name is None:
+            return self.UNAUTHORIZED_RESPONSE
+
+        name = request.json.get('name')
+        if not isinstance(name, str) or not name:
+            return {'message': 'name is required'}, HTTPStatus.BAD_REQUEST
+        pallet, _, error = self.get_owned_pallet(request.json.get('document_id'), user_name)
+        if error:
+            return error
+        print("rename")
+        pallet.update({"name": name})
+        return {'message': 'renamed'}, HTTPStatus.OK
